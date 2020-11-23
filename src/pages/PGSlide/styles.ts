@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Home = styled.div`
+export const Home = styled.section`
     height: 100vh;
     overflow: hidden;
     position: relative;
