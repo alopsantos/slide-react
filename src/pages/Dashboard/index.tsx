@@ -1,53 +1,92 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { BiBath, BiRestaurant, BiBed, BiCar } from 'react-icons/bi';
+import { RiSlideshow3Line } from 'react-icons/ri';
+import { FaRestroom } from 'react-icons/fa';
 
-import { Container, Content } from './styles';
 import api from '../../services/api';
 
-interface IntLinks {
-  id: number;
+import { Slideshow, SlideshowItem, SlideShowItemText } from './styles';
+
+interface ISlideimoveis {
+  code: number | string;
   title: string;
-  url: string;
+  description: string;
+  details: IDetails;
+  image: string;
 }
-interface IntPerfil {
-  id: number;
-  title: string;
-  urlavatar: string;
+interface IDetails {
+  dormitorios: string;
+  banheiros: string;
+  garagem: string;
+  sala: string;
+  cozinha: string;
+  suite: string;
 }
 const Dashboard: React.FC = () => {
-  const [Apilinks, setLinks] = useState<IntLinks[]>([]);
-  const [perfils, setPerfils] = useState<IntPerfil[]>([]);
-  console.log(api);
-
+  const [Slides, setSlides] = useState<ISlideimoveis[]>([]);
   useEffect(() => {
     loadApi();
   }, []);
 
-  async function loadApi(){
-    const response = await api.get('/linksvarejo');
-    const responseperfil = await api.get('/perfil');
-    setPerfils(responseperfil.data);
-    setLinks(response.data);
+  async function loadApi() {
+    const response = await api.get('/imoveis');
+    setSlides(response.data);
   }
   return (
-    <Container>
-      <Content>
-        {perfils.map(perfil => (
-          <div key={perfil.id}>
-            <img src={perfil.urlavatar} alt={perfil.title} />
-            <span>{perfil.title}</span>
-          </div>
-        ))}
-        <ul>
-          {Apilinks.map(link => (
-            <li key={link.id}>
-              <a href={link.url} target="_blank" title={link.title}>
-                {link.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </Content>
-    </Container>
+    <Slideshow>
+      {Slides.map((slide, i = Slides.length - 1) => (
+        <SlideshowItem style={{ animationDelay: `${i * 10}s` }}>
+          <img style={{ animationDelay: `${i * 10}s` }} src={slide.image} />
+          <SlideShowItemText style={{ animationDelay: `${i * 10}s` }}>
+            <h5 style={{ animationDelay: `${i * 10}s` }}>Cod: {slide.code}</h5>
+            <p style={{ animationDelay: `${i * 10}s` }}>{slide.description}</p>
+            <p style={{ animationDelay: `${i * 10}s` }}>
+              <ul>
+                {slide.details.suite && (
+                  <li>
+                    <BiBath size="32" />
+                    {slide.details.suite}
+                  </li>
+                )}
+                {slide.details.dormitorios && (
+                  <li>
+                    <BiBed size="32" />
+                    {slide.details.dormitorios}
+                  </li>
+                )}
+
+                {slide.details.banheiros && (
+                  <li>
+                    <FaRestroom size="32" />
+                    {slide.details.banheiros}
+                  </li>
+                )}
+
+                {slide.details.sala && (
+                  <li>
+                    <RiSlideshow3Line size="32" />
+                    {slide.details.sala}
+                  </li>
+                )}
+
+                {slide.details.cozinha && (
+                  <li>
+                    <BiRestaurant size="32" />
+                    {slide.details.cozinha}
+                  </li>
+                )}
+                {slide.details.garagem && (
+                  <li>
+                    <BiCar size="32" />
+                    {slide.details.garagem}
+                  </li>
+                )}
+              </ul>
+            </p>
+          </SlideShowItemText>
+        </SlideshowItem>
+      ))}
+    </Slideshow>
   );
 };
 

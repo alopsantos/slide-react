@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://my-json-server.typicode.com/alopsantos/linksestacaostore',
+    baseURL: 'http://my-json-server.typicode.com/alopsantos/imobiliariam3/',
 });
 
 export default api;
